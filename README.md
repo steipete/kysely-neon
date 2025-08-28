@@ -112,3 +112,7 @@ await db
   .returning("id")
   .executeTakeFirstOrThrow()
 ```
+
+## Acknowledgements
+
+[seveibar](https://github.com/seveibar) who created and maintained this library. :heart:
