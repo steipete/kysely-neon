@@ -153,8 +153,9 @@ var NeonHTTPDriver = class {
   #connection;
   constructor(config) {
     this.#config = config;
+    const sql = (0, import_serverless2.neon)(this.#config.connectionString, { fullResults: true });
     this.#connection = new NeonConnection({
-      query: (0, import_serverless2.neon)(this.#config.connectionString, { fullResults: true })
+      query: (query, parameters) => sql.query(query, parameters)
     });
   }
   async init() {
