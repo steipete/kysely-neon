@@ -1,3 +1,6 @@
-import * as crypto from "isomorphic-webcrypto"
+import * as crypto from "isomorphic-webcrypto";
 
-global.crypto = crypto
+Object.defineProperty(globalThis, "crypto", {
+  configurable: true,
+  value: crypto,
+});

@@ -23,47 +23,47 @@ npm i kysely-neon kysely @neondatabase/serverless ws
 Edge runtime:
 
 ```typescript
-import { GeneratedAlways, Kysely } from "kysely"
-import { NeonDialect } from "kysely-neon"
+import { GeneratedAlways, Kysely } from "kysely";
+import { NeonDialect } from "kysely-neon";
 
 interface Database {
-  person: PersonTable
+  person: PersonTable;
 }
 
 interface PersonTable {
-  id: GeneratedAlways<number>
-  first_name: string
-  gender: "male" | "female" | "other"
+  id: GeneratedAlways<number>;
+  first_name: string;
+  gender: "male" | "female" | "other";
 }
 
 const db = new Kysely<Database>({
   dialect: new NeonDialect({
     connectionString: process.env.DATABASE_URL,
   }),
-})
+});
 
 await db
   .insertInto("person")
   .values({ first_name: "Jennifer", gender: "female" })
   .returning("id")
-  .executeTakeFirstOrThrow()
+  .executeTakeFirstOrThrow();
 ```
 
 Node.js:
 
 ```typescript
-import { GeneratedAlways, Kysely } from "kysely"
-import { NeonDialect } from "kysely-neon"
-import ws from "ws"
+import { GeneratedAlways, Kysely } from "kysely";
+import { NeonDialect } from "kysely-neon";
+import ws from "ws";
 
 interface Database {
-  person: PersonTable
+  person: PersonTable;
 }
 
 interface PersonTable {
-  id: GeneratedAlways<number>
-  first_name: string
-  gender: "male" | "female" | "other"
+  id: GeneratedAlways<number>;
+  first_name: string;
+  gender: "male" | "female" | "other";
 }
 
 const db = new Kysely<Database>({
@@ -71,44 +71,44 @@ const db = new Kysely<Database>({
     connectionString: process.env.DATABASE_URL,
     webSocketConstructor: ws,
   }),
-})
+});
 
 await db
   .insertInto("person")
   .values({ first_name: "Jennifer", gender: "female" })
   .returning("id")
-  .executeTakeFirstOrThrow()
+  .executeTakeFirstOrThrow();
 ```
 
 Experimental HTTP Dialect:
 
-`@neondatabase/serverless` has a new experimental `neon` function that allows making stateless HTTPS requests, 
+`@neondatabase/serverless` has a new experimental `neon` function that allows making stateless HTTPS requests,
 that should have lower latencies, but no session or transaction support. To use it, import and use `NeonHTTPDialect`
 instead of `NeonDialect`.
 
 ```typescript
-import { GeneratedAlways, Kysely } from "kysely"
-import { NeonHTTPDialect } from "kysely-neon"
+import { GeneratedAlways, Kysely } from "kysely";
+import { NeonHTTPDialect } from "kysely-neon";
 
 interface Database {
-  person: PersonTable
+  person: PersonTable;
 }
 
 interface PersonTable {
-  id: GeneratedAlways<number>
-  first_name: string
-  gender: "male" | "female" | "other"
+  id: GeneratedAlways<number>;
+  first_name: string;
+  gender: "male" | "female" | "other";
 }
 
 const db = new Kysely<Database>({
   dialect: new NeonHTTPDialect({
     connectionString: process.env.DATABASE_URL,
   }),
-})
+});
 
 await db
   .insertInto("person")
   .values({ first_name: "Jennifer", gender: "female" })
   .returning("id")
-  .executeTakeFirstOrThrow()
+  .executeTakeFirstOrThrow();
 ```

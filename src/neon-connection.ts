@@ -1,50 +1,44 @@
-import { CompiledQuery, DatabaseConnection, QueryResult } from "kysely"
+import { CompiledQuery, DatabaseConnection, QueryResult } from "kysely";
 
 export interface Client {
-  query: (sql: string, parameters: any[]) => Promise<any>
-  release?: () => void
+  query: (sql: string, parameters: any[]) => Promise<any>;
+  release?: () => void;
 }
 
-export const PRIVATE_RELEASE_METHOD = Symbol("release")
+export const PRIVATE_RELEASE_METHOD = Symbol("release");
 
 export class NeonConnection implements DatabaseConnection {
-  readonly #client: Client
+  readonly #client: Client;
 
   constructor(client: Client) {
-    this.#client = client
+    this.#client = client;
   }
 
   async executeQuery<O>(compiledQuery: CompiledQuery): Promise<QueryResult<O>> {
-    const result = await this.#client.query(compiledQuery.sql, [
-      ...compiledQuery.parameters,
-    ])
+    const result = await this.#client.query(compiledQuery.sql, [...compiledQuery.parameters]);
 
-    if (
-      result.command === "INSERT" ||
-      result.command === "UPDATE" ||
-      result.command === "DELETE"
-    ) {
-      const numAffectedRows = BigInt(result.rowCount)
+    if (result.command === "INSERT" || result.command === "UPDATE" || result.command === "DELETE") {
+      const numAffectedRows = BigInt(result.rowCount);
 
       return {
         numAffectedRows,
         rows: result.rows ?? [],
-      }
+      };
     }
 
     return {
       rows: result.rows ?? [],
-    }
+    };
   }
 
   async *streamQuery<O>(
     _compiledQuery: CompiledQuery,
-    _chunkSize: number
+    _chunkSize: number,
   ): AsyncIterableIterator<QueryResult<O>> {
-    throw new Error("Neon Driver does not support streaming")
+    throw new Error("Neon Driver does not support streaming");
   }
 
   [PRIVATE_RELEASE_METHOD](): void {
-    this.#client.release?.()
+    this.#client.release?.();
   }
 }

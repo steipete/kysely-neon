@@ -1,2 +1,2 @@
-export * from "./neon-dialect"
-export * from "./neon-http-dialect"
+export * from "./neon-dialect";
+export * from "./neon-http-dialect";

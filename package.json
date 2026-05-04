@@ -2,48 +2,54 @@
   "name": "kysely-neon",
   "version": "1.3.1",
   "description": "",
-  "main": "./dist/index.js",
-  "packageManager": "pnpm@10.33.2",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "default": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
-  "scripts": {
-    "build": "tsup",
-    "typecheck": "tsc --noEmit",
-    "test": "ava"
-  },
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
   "files": [
     "dist",
     "README.md"
   ],
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --format=cjs --external:@neondatabase/serverless --external:kysely --external:ws --outfile=dist/index.js && esbuild src/index.ts --bundle --platform=node --format=esm --external:@neondatabase/serverless --external:kysely --external:ws --outfile=dist/index.mjs && tsc --project tsconfig.build.json",
+    "typecheck": "tsgo --noEmit",
+    "test": "ava",
+    "format": "oxfmt --write package.json tsconfig.json tsconfig.build.json ava.config.js src tests",
+    "format:check": "oxfmt --check package.json tsconfig.json tsconfig.build.json ava.config.js src tests",
+    "lint": "pnpm format:check && pnpm typecheck && oxlint --deny-warnings --allow eslint/require-yield --type-aware --tsconfig tsconfig.json src tests",
+    "check": "pnpm build && pnpm lint && pnpm test"
+  },
   "devDependencies": {
-    "@neondatabase/serverless": "^1.0.1",
-    "@semantic-release/commit-analyzer": "^10.0.1",
+    "@neondatabase/serverless": "^1.1.0",
+    "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/git": "^10.0.1",
-    "@semantic-release/npm": "^10.0.4",
-    "@semantic-release/release-notes-generator": "^11.0.4",
-    "@types/node": "^18.14.6",
-    "@types/ws": "^8.5.4",
-    "ava": "^5.2.0",
-    "esbuild": "^0.17.11",
-    "esbuild-register": "^3.4.2",
+    "@semantic-release/npm": "^13.1.5",
+    "@semantic-release/release-notes-generator": "^14.1.0",
+    "@types/node": "^25.6.0",
+    "@types/ws": "^8.18.1",
+    "@typescript/native-preview": "7.0.0-dev.20260503.1",
+    "ava": "^8.0.0",
+    "esbuild": "^0.28.0",
+    "esbuild-register": "^3.6.0",
     "isomorphic-webcrypto": "^2.3.8",
-    "kysely": "^0.28.0",
-    "prettier": "^2.8.4",
-    "semantic-release": "^21.0.7",
-    "tsup": "^6.7.0",
-    "typescript": "^4.9.5",
-    "ws": "^8.13.0"
+    "kysely": "^0.28.17",
+    "oxfmt": "^0.47.0",
+    "oxlint": "^1.62.0",
+    "oxlint-tsgolint": "^0.22.1",
+    "prettier": "^3.8.3",
+    "semantic-release": "^25.0.3",
+    "typescript": "^6.0.3",
+    "ws": "^8.20.0"
   },
   "peerDependencies": {
     "@neondatabase/serverless": "^0.4.26 || ^1.0.0",
@@ -54,5 +60,6 @@
     "ws": {
       "optional": true
     }
-  }
+  },
+  "packageManager": "pnpm@10.33.2"
 }

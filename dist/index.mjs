@@ -5,22 +5,17 @@ import {
   PostgresIntrospector,
   PostgresQueryCompiler
 } from "kysely";
-import {
-  Pool,
-  neonConfig
-} from "@neondatabase/serverless";
+import { Pool, neonConfig } from "@neondatabase/serverless";
 
 // src/neon-connection.ts
-var PRIVATE_RELEASE_METHOD = Symbol("release");
+var PRIVATE_RELEASE_METHOD = /* @__PURE__ */ Symbol("release");
 var NeonConnection = class {
   #client;
   constructor(client) {
     this.#client = client;
   }
   async executeQuery(compiledQuery) {
-    const result = await this.#client.query(compiledQuery.sql, [
-      ...compiledQuery.parameters
-    ]);
+    const result = await this.#client.query(compiledQuery.sql, [...compiledQuery.parameters]);
     if (result.command === "INSERT" || result.command === "UPDATE" || result.command === "DELETE") {
       const numAffectedRows = BigInt(result.rowCount);
       return {
@@ -82,9 +77,7 @@ var NeonDriver = class {
   async beginTransaction(conn, settings) {
     if (settings.isolationLevel) {
       await conn.executeQuery(
-        CompiledQuery.raw(
-          `start transaction isolation level ${settings.isolationLevel}`
-        )
+        CompiledQuery.raw(`start transaction isolation level ${settings.isolationLevel}`)
       );
     } else {
       await conn.executeQuery(CompiledQuery.raw("begin"));
