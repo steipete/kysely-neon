@@ -12,6 +12,7 @@ import {
 } from "kysely";
 import { neon } from "@neondatabase/serverless";
 import { NeonConnection } from "./neon-connection";
+import { neonHTTPQuery, type NeonHTTPClient } from "./neon-http-query";
 
 interface NeonHTTPDialectConfig {
   connectionString: string;
@@ -47,9 +48,10 @@ class NeonHTTPDriver implements Driver {
 
   constructor(config: NeonHTTPDialectConfig) {
     this.#config = config;
-    const sql = neon(this.#config.connectionString, { fullResults: true });
+    const sql = neon(this.#config.connectionString, { fullResults: true }) as unknown as NeonHTTPClient;
+    const query = neonHTTPQuery(sql);
     this.#connection = new NeonConnection({
-      query: (query, parameters) => sql.query(query, parameters),
+      query: (queryText, parameters) => query(queryText, parameters),
     });
   }
 
