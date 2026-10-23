@@ -6,25 +6,28 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        node-version: [18.x]
-
+        neon-version: [locked, 0.4.26]
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-      - name: Install pnpm
-        run: npm install -g pnpm
-      - run: pnpm install --no-frozen-lockfile
-      - run: pnpm typecheck
-      - run: pnpm test
+          node-version: '24'
+      - name: Enable the pinned pnpm version
+        run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - name: Install the oldest supported Neon client
+        if: matrix.neon-version != 'locked'
+        run: pnpm add --save-dev @neondatabase/serverless@${{ matrix.neon-version }} --ignore-scripts
+      - run: pnpm check
         env:
           CI: true
           NEON_DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}

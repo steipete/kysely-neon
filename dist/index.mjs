@@ -141,7 +141,9 @@ var NeonHTTPDriver = class {
   #connection;
   constructor(config) {
     this.#config = config;
-    const sql = neon(this.#config.connectionString, { fullResults: true });
+    const sql = neon(this.#config.connectionString, {
+      fullResults: true
+    });
     const query = neonHTTPQuery(sql);
     this.#connection = new NeonConnection({
       query: (queryText, parameters) => query(queryText, parameters)

@@ -48,7 +48,9 @@ class NeonHTTPDriver implements Driver {
 
   constructor(config: NeonHTTPDialectConfig) {
     this.#config = config;
-    const sql = neon(this.#config.connectionString, { fullResults: true }) as unknown as NeonHTTPClient;
+    const sql = neon(this.#config.connectionString, {
+      fullResults: true,
+    }) as unknown as NeonHTTPClient;
     const query = neonHTTPQuery(sql);
     this.#connection = new NeonConnection({
       query: (queryText, parameters) => query(queryText, parameters),
