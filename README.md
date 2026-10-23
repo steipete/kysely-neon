@@ -112,3 +112,17 @@ await db
   .returning("id")
   .executeTakeFirstOrThrow();
 ```
+
+The HTTP dialect supports both the callable API in `@neondatabase/serverless` 0.4.26
+and the `query()` API in 1.x. SQL parameters remain separate from the query text.
+
+## Development
+
+Use Node.js 24 and the pnpm version pinned in `package.json`. Run
+`corepack enable`, `pnpm install --frozen-lockfile`, and `pnpm check` to build,
+lint, typecheck, and test. Set `NEON_DATABASE_URL` only for the optional live
+integration tests; the unit tests run without database credentials.
+
+Publishing is manual through the **NPM Semantic Release** workflow on `main`.
+Its default dry run previews a release without changing versions, creating tags,
+or publishing a package. Disable `dry_run` only for an explicitly approved release.

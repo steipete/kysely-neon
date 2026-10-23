@@ -41,7 +41,6 @@
     "ava": "^8.0.0",
     "esbuild": "^0.28.0",
     "esbuild-register": "^3.6.0",
-    "isomorphic-webcrypto": "^2.3.8",
     "kysely": "^0.28.17",
     "oxfmt": "^0.47.0",
     "oxlint": "^1.62.0",

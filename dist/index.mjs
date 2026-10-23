@@ -108,6 +108,16 @@ import {
   PostgresQueryCompiler as PostgresQueryCompiler2
 } from "kysely";
 import { neon } from "@neondatabase/serverless";
+
+// src/neon-http-query.ts
+function neonHTTPQuery(sql) {
+  if (typeof sql.query === "function") {
+    return sql.query.bind(sql);
+  }
+  return (query, parameters) => sql(query, parameters);
+}
+
+// src/neon-http-dialect.ts
 var NeonHTTPDialect = class {
   #config;
   constructor(config) {
@@ -131,9 +141,12 @@ var NeonHTTPDriver = class {
   #connection;
   constructor(config) {
     this.#config = config;
-    const sql = neon(this.#config.connectionString, { fullResults: true });
+    const sql = neon(this.#config.connectionString, {
+      fullResults: true
+    });
+    const query = neonHTTPQuery(sql);
     this.#connection = new NeonConnection({
-      query: (query, parameters) => sql.query(query, parameters)
+      query: (queryText, parameters) => query(queryText, parameters)
     });
   }
   async init() {
