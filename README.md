@@ -124,5 +124,6 @@ lint, typecheck, and test. Set `NEON_DATABASE_URL` only for the optional live
 integration tests; the unit tests run without database credentials.
 
 Publishing is manual through the **NPM Semantic Release** workflow on `main`.
-Its default dry run previews a release without changing versions, creating tags,
-or publishing a package. Disable `dry_run` only for an explicitly approved release.
+Its default dry run validates the build and previews the next version and release
+notes without registry credentials, changing versions, creating tags, or publishing
+a package. Disable `dry_run` only for an explicitly approved release.
